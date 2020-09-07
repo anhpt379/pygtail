@@ -261,7 +261,9 @@ class Pygtail(object):
         # the file is prepended as part of rotation
         file_dir, rel_filename = os.path.split(self.filename)
         for rotated_filename_pattern in rotated_filename_patterns:
-            candidates = glob.glob(os.path.join(file_dir, rotated_filename_pattern % rel_filename))
+            if '%s' in rotated_filename_pattern:
+                rotated_filename_pattern = rotated_filename_pattern % rel_filename
+            candidates = glob.glob(os.path.join(file_dir, rotated_filename_pattern))
             if candidates:
                 candidates.sort()
                 return candidates[-1]  # return most recent
